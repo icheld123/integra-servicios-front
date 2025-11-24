@@ -65,14 +65,12 @@ ng test
 
 ## 👨‍💻 Equipo de Desarrollo -- CodePark
 
-  Nombre                            Código
-  --------------------------------- -------------
-  Nicolás Andrés Díaz Méndez        20201020130
-  Ichel Alejandra Delgado Morales   20202020029
-  Juan David Olmos Corredor         20202020004
-  Andrés Felipe Salazar Malagón     20202020043
-  Andrés Felipe Martin Rodríguez    20201020137
-  Víctor Manuel Torres Beltrán      20211020104
+-   Nicolás Andrés Díaz Méndez - 20201020130
+-   Ichel Alejandra Delgado Morales - 20202020029
+-   Juan David Olmos Corredor - 20202020004
+-   Andrés Felipe Salazar Malagón - 20202020043
+-   Andrés Felipe Martin Rodríguez - 20201020137
+-   Víctor Manuel Torres Beltrán - 20211020104
 
 ## 📄 Licencia
 
