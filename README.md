@@ -1,27 +1,80 @@
-# IntegraServiciosFront
+# 🧩 IntegraServicios -- Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.1.
+### Proyecto Final -- Seminario de Ingeniería de Software
 
-## Development server
+### Equipo de Desarrollo: **CodePark**
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 📘 Descripción del Proyecto
 
-## Code scaffolding
+**IntegraServicios** es una aplicación web desarrollada en **Angular**,
+orientada a la gestión centralizada de servicios internos dentro de una
+organización. Este repositorio corresponde al **frontend** del sistema,
+construido bajo una arquitectura modular, buenas prácticas de ingeniería
+de software y metodologías colaborativas. El proyecto fue creado como
+parte del curso **Seminario de Ingeniería de Software**, integrando
+conceptos como arquitectura limpia, diseño responsivo, análisis de
+requerimientos y despliegue.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 🛠️ Tecnologías y Herramientas Utilizadas
 
-## Build
+### Framework principal
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+-   Angular 18
 
-## Running unit tests
+### Diseño y UI
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+-   TailwindCSS
 
-## Running end-to-end tests
+### Testing
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+-   Karma
+-   Jasmine
 
-## Further help
+### Lenguaje
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+-   TypeScript 5.5
+
+## 🚀 Instalación y Ejecución
+
+### 1️⃣ Clonar el repositorio
+
+``` bash
+git clone <URL_DEL_REPOSITORIO>
+cd integra-servicios-front
+```
+
+### 2️⃣ Instalar dependencias
+
+``` bash
+npm install
+```
+
+### 3️⃣ Ejecutar el servidor de desarrollo
+
+``` bash
+ng serve
+```
+
+Aplicación disponible en: http://localhost:4200/
+
+## 🧪 Ejecutar pruebas unitarias
+
+``` bash
+ng test
+```
+
+## 👨‍💻 Equipo de Desarrollo -- CodePark
+
+  Nombre                            Código
+  --------------------------------- -------------
+  Nicolás Andrés Díaz Méndez        20201020130
+  Ichel Alejandra Delgado Morales   20202020029
+  Juan David Olmos Corredor         20202020004
+  Andrés Felipe Salazar Malagón     20202020043
+  Andrés Felipe Martin Rodríguez    20201020137
+  Víctor Manuel Torres Beltrán      20211020104
+
+## 📄 Licencia
+
+Este proyecto fue desarrollado exclusivamente con fines académicos para
+el curso de Seminario de Ingeniería de Software.
