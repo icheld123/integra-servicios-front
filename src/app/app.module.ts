@@ -8,6 +8,7 @@ import { FooterComponent } from './core/footer/footer.component';
 import { InicioComponent } from './feature/inicio/inicio.component';
 import { RegistroComponent } from './feature/registro/registro.component';
 import { InicioSesionComponent } from './feature/inicio-sesion/inicio-sesion.component';
+import { CarruselInicioComponent } from './feature/carrusel-inicio/carrusel-inicio.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { InicioSesionComponent } from './feature/inicio-sesion/inicio-sesion.com
     FooterComponent,
     InicioComponent,
     RegistroComponent,
-    InicioSesionComponent
+    InicioSesionComponent,
+    CarruselInicioComponent
   ],
   imports: [
     BrowserModule,
