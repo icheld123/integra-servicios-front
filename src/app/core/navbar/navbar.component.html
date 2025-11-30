@@ -45,11 +45,19 @@
 
         </button>
         <a
-          href="#"
-          class="rounded-lg px-4 py-2 font-medium text-black">
+          (click)="abrirModal()"
+          class="rounded-lg px-4 py-2 font-medium text-black cursor-pointer"
+        >
           Empezar ahora
         </a>
+        <button class="rounded-lg px-4 py-2 font-medium text-white cursor-pointer bg-red-700 hover:bg-red-600">Ver recursos</button>
+
       </div>
     </div>
   </div>
 </nav>
+
+<app-inicio-sesion
+  [abierto]="modalAbierto"
+  (cerrar)="cerrarModal()"
+></app-inicio-sesion>
