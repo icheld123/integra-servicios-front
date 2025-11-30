@@ -5,6 +5,8 @@ import { InicioComponent } from './feature/inicio/inicio.component';
 const routes: Routes = [
   { path: '', redirectTo: '/inicio', pathMatch: 'full' },
   { path: 'inicio', component: InicioComponent },
+  
+
 ];
 
 @NgModule({
