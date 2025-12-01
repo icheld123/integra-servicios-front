@@ -1,34 +1,29 @@
 <div class="home-page text-m bg-red-500 min-h-screen flex flex-col">
-
-  <!-- Carrusel arriba -->
   <div class="w-full">
     <app-carrusel-inicio></app-carrusel-inicio>
   </div>
-
-  <!-- Botones abajo -->
-  <div class="flex flex-col md:flex-row gap-6 justify-center items-center p-6 flex-1">
+  <!-- aumento de gap y centrado -->
+  <div class="flex flex-col md:flex-row gap-16 justify-center items-center p-6 flex-1 w-full">
 
     <div 
       *ngFor="let boton of botones_inicio"
-      class="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow duration-300
-             w-48 h-56 flex flex-col items-center justify-center text-center">
+      class="bg-white rounded-lg shadow-md p-8 hover:shadow-xl transition-shadow duration-300
+             w-56 sm:w-64 md:w-72 h-64 sm:h-72 md:h-80 flex flex-col items-center justify-center text-center transform hover:scale-105">
         
         <a 
           [routerLink]="boton.ruta"
-          class="text-sm font-semibold text-gray-700 hover:text-indigo-800 
-                 mb-4 bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-full transition">
+          class="text-base sm:text-lg font-semibold text-gray-700 hover:text-indigo-800 
+                 mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded-full transition">
           {{ boton.titulo }}
         </a>
 
         <img 
           [src]="boton.image" 
           alt="" 
-          class="w-20 h-20 object-contain mb-4">
+          class="w-24 h-24 sm:w-28 sm:h-28 object-contain mb-4">
 
-        <p class="text-sm text-black">{{ boton.texto }}</p>
+        <p class="text-sm sm:text-base text-black px-2">{{ boton.texto }}</p>
 
     </div>
-
   </div>
-
 </div>

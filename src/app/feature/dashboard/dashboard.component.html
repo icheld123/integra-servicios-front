@@ -1,0 +1,87 @@
+<div class="p-4 dashboard">
+
+  <!-- CONTENEDOR DEL FILTRO -->
+  <div class="bg-white m-auto border-2 border-gray-300 rounded-lg p-4 
+              flex items-center justify-between gap-6 w-full max-w-7xl">
+
+    <!-- Filtro -->
+    <form [formGroup]="filter" class="mt-4">
+      <div class="flex flex-col gap-2 w-64">
+        <label class="text-sm font-medium">Tipo de Recurso:</label>
+
+        <select formControlName="tipo"
+                class="px-3 py-2 bg-white border border-gray-300 
+                       text-gray-700 text-sm rounded-lg
+                       focus:ring-2 focus:ring-red-700">
+          <option value="">Todos</option>
+          <option *ngFor="let tipo of tiposRecursos"
+                  [value]="tipo.id_tipo_recurso">
+            {{ tipo.nombre_tipo_recurso }}
+          </option>
+        </select>
+
+      </div>    
+    </form>
+
+    <!-- Botón -->
+    <div>
+      <button type="button" (click)="filterRecursos()"
+              class="bg-red-700 p-2 text-white rounded-lg">
+        Filtrar
+      </button>
+    </div>
+
+  </div>
+
+  <!-- CONTENEDOR DE TARJETAS CON MISMO ANCHO -->
+  <div class="mt-4 w-full m-auto">
+
+    <div class="flex flex-wrap justify-center gap-4">
+      <div *ngFor="let recurso of recursos"
+           class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 bg-white border border-gray-300 
+                  rounded-lg p-4 flex flex-col items-center">
+
+        <img class="w-40 h-40 mb-4 object-cover"
+             [src]="recurso.foto_recurso || 'https://cdn.britannica.com/77/170477-050-1C747EE3/Laptop-computer.jpg'"
+             alt="recurso">
+
+        <p><strong>ID:</strong> {{recurso.id_recurso}}</p>
+        <p><strong>Nombre:</strong> {{recurso.nombre_recurso}}</p>
+        <p><strong>Descripción:</strong> {{recurso.descripcion_recurso}}</p>
+        <p><strong>Estado: </strong>
+          <span class="text-green-600 font-semibold">{{recurso.estado_recurso}}</span>
+        </p>
+        <p><strong>Tipo:</strong> {{recurso.nombre_tipo}}</p>
+
+        <button (click)="reservarRecurso(recurso)"
+                class="bg-red-700 text-white p-2 rounded-lg">
+          Reservar
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- PAGINADOR -->
+  <div class="flex justify-center items-center mt-6 gap-4">
+
+    <button (click)="prevPage()"
+            [disabled]="page === 1"
+            class="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50">
+      Anterior
+    </button>
+
+    <span class="text-white text-lg font-semibold">
+      Página {{page}}
+    </span>
+
+    <button (click)="nextPage()"
+            class="px-4 py-2 bg-gray-200 rounded-lg">
+      Siguiente
+    </button>
+
+  </div>
+
+</div>
