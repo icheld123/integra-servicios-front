@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output } from '@angular/core';
 import { RecursoDataService } from '../../shared/services/recurso.data.service';
 import { Recurso } from '../../shared/models/recurso.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -10,11 +10,14 @@ import { TipoRecurso } from '../../shared/models/tipo-recurso.model';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
+  @Output() recursoSeleccionado: Recurso | null = null;
   recursos: Recurso[] = [];
   tiposRecursos: TipoRecurso[] = [];
   page: number = 1;
   limit: number = 9;
   skip: number = 0;
+
+  modalAbierto = false;
 
   filter: FormGroup;
 
@@ -83,4 +86,14 @@ export class DashboardComponent {
   reservarRecurso(recurso: Recurso) {
     console.log('Recurso reservado:', recurso);
   }
+
+  abrirModal(recurso: Recurso) {
+    this.recursoSeleccionado = recurso;
+    this.modalAbierto = true;
+  }
+
+  cerrarModal() {
+    this.modalAbierto = false;
+  }
+
 }

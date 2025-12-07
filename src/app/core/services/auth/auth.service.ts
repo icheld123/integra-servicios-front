@@ -82,6 +82,8 @@ export class AuthService {
       const decoded = jwt_decode.jwtDecode<any>(token);
       const user: Usuario = {
         sub: decoded.sub,
+        nombre: decoded.nombre,
+        apellido: decoded.apellido,
         id_usuario: decoded.id_usuario,
         id_tipo_usuario: decoded.id_tipo_usuario,
         tipo_usuario: decoded.tipo_usuario,
@@ -91,7 +93,6 @@ export class AuthService {
       localStorage.setItem(this.AUTH_USER_KEY, JSON.stringify(user));
       this.currentUserSubject.next(user);
     } catch (error) {
-      console.error('Error decodificando el token:', error);
     }
   }
 

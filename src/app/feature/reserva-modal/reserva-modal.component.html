@@ -1,0 +1,81 @@
+<div
+  *ngIf="abierto"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+>
+  <div class="modal w-2/5 rounded-xl shadow-xl p-6 relative bg-white">
+    <button
+      (click)="close()"
+      class="absolute top-2 right-2 text-white bg-red-600 rounded-full px-2 py-1"
+    >
+      ✕
+    </button>
+
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Escudo_UD.svg/2118px-Escudo_UD.svg.png"
+         alt="" class="h-32 mx-auto mb-4">
+
+    <h2 class="text-2xl font-bold mb-4 text-center">
+      Reserva de recurso {{ recursoNombre.nombre_recurso }}
+    </h2>
+    <p class="text-center font-bold ">Horarios de disponibilidad:</p>
+    <div class="flex justify-center">
+        
+        <table class="mb-4 text-left mx-auto">
+            <tr *ngFor="let dia of recursoNombre.horario_disponible">
+            <td class="font-semibold pr-4 align-top">{{ dia.dia }}:</td>
+            <td>
+                <span *ngFor="let horario of dia.horarios; let isLast = last">
+                {{ horario.hora_inicio }} - {{ horario.hora_fin }}
+                <span *ngIf="!isLast">, </span>
+                </span>
+            </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div *ngIf="errorMessage" class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+      {{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage" class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm">
+      {{ successMessage }}
+    </div>
+
+    <form [formGroup]="reservaForm" (ngSubmit)="procesarReserva()" class="space-y-4 text-center">
+
+      <div class="flex gap-4">
+        <mat-form-field  class="flex-1">
+            <mat-label>Fecha de inicio de reserva:</mat-label>
+            <input formControlName="fecha_inicio" matInput [matDatepicker]="pickerInicio">
+            <mat-datepicker-toggle matIconSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInicio></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="field" appearance="fill">
+            <mat-label>Hora de inicio de reserva:</mat-label>
+            <input matInput type="time" formControlName="hora_inicio">
+        </mat-form-field>
+      </div>
+
+        <div class="flex gap-4">
+            <mat-form-field  class="flex-1">
+                <mat-label>Fecha de fin de reserva:</mat-label>
+                <input formControlName="fecha_fin" matInput [matDatepicker]="pickerFin">
+                <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFin></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="field" appearance="fill">
+                <mat-label>Hora de fin de reserva:</mat-label>
+                <input matInput type="time" formControlName="hora_fin">
+            </mat-form-field>
+        </div>
+      <div class="flex justify-center">
+        <button type="submit" [disabled]="loading"
+                class="w-24 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white py-2 rounded-full text-lg font-semibold">
+          Reservar
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>

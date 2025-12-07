@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { LoginCredentials } from '../../core/services/auth/auth.models';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-inicio-sesion',
@@ -21,7 +23,8 @@ export class InicioSesionComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastr: ToastrService
   ) {
 
     this.loginForm = this.fb.group({
@@ -58,9 +61,7 @@ export class InicioSesionComponent {
     this.authService.login(credentials).subscribe({
       next: (response) => {
         this.loading = false;
-        this.successMessage = '¡Inicio de sesión exitoso!';
-        console.log('Login exitoso:', response);
-        
+        this.toastr.success('¡Inicio de sesión exitoso!', 'Éxito');
         setTimeout(() => {
           this.cerrar.emit();
           this.loginForm.reset();
@@ -70,22 +71,19 @@ export class InicioSesionComponent {
       },
       error: (error) => {
         this.loading = false;
-        this.errorMessage = 'Credenciales inválidas. Intenta nuevamente.';
-        console.error('Error en login:', error);
+        this.toastr.error('Credenciales inválidas. Intenta nuevamente.', 'Error');
       }
     });
   }
 
   enviarRegistro() {
     if (this.registroForm.invalid) {
-      this.errorMessage = 'Por favor, completa todos los campos correctamente.';
+      this.toastr.error('Por favor, completa todos los campos correctamente', 'Error');
       return;
     }
     this.loading = true;
     this.errorMessage = null;
     this.successMessage = null;
-    console.log("REGISTRO:", this.registroForm.value);
-    // Aquí iría la llamada al servicio de registro
   }
 
   cambiarModo() {

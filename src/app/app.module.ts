@@ -2,6 +2,14 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
+import { ToastrModule } from 'ngx-toastr';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +23,7 @@ import { DashboardComponent } from './feature/dashboard/dashboard.component';
 import { AuthService } from './core/services/auth/auth.service';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { HttpgeneralService } from './core/services/http-general.service';
+import { ReservaModalComponent } from './feature/reserva-modal/reserva-modal.component';
 
 @NgModule({
   declarations: [
@@ -26,15 +35,29 @@ import { HttpgeneralService } from './core/services/http-general.service';
     InicioSesionComponent,
     CarruselInicioComponent,
     DashboardComponent,
+    ReservaModalComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    MatCheckboxModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     AuthService,
+    provideNativeDateAdapter(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
     HttpgeneralService,
     {
       provide: HTTP_INTERCEPTORS,
