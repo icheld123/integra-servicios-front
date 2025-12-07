@@ -69,7 +69,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.handleTokenExpired();
       }, msUntilExpire + 500);
     } catch (e) {
-      // no es JWT o parseo fallido: no programamos expiración
     }
   }
 

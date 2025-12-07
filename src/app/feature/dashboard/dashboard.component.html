@@ -19,7 +19,9 @@
             {{ tipo.nombre_tipo_recurso }}
           </option>
         </select>
-
+        <section class="example-section">
+          <mat-checkbox formControlName="estado" class="example-margin">Disponibles</mat-checkbox>
+        </section>
       </div>    
     </form>
 
@@ -44,17 +46,18 @@
         <img class="w-40 h-40 mb-4 object-cover"
              [src]="recurso.foto_recurso || 'https://cdn.britannica.com/77/170477-050-1C747EE3/Laptop-computer.jpg'"
              alt="recurso">
-
-        <p><strong>ID:</strong> {{recurso.id_recurso}}</p>
         <p><strong>Nombre:</strong> {{recurso.nombre_recurso}}</p>
         <p><strong>Descripción:</strong> {{recurso.descripcion_recurso}}</p>
         <p><strong>Estado: </strong>
-          <span class="text-green-600 font-semibold">{{recurso.estado_recurso}}</span>
+          <span 
+          [ngClass]="{'text-green-600': recurso.estado_recurso  ===  'Disponible',
+                      'text-red-600': recurso.estado_recurso  !==  'Disponible'}" 
+          class="font-semibold">{{recurso.estado_recurso}}</span>
         </p>
         <p><strong>Tipo:</strong> {{recurso.nombre_tipo}}</p>
 
-        <button (click)="reservarRecurso(recurso)"
-                class="bg-red-700 text-white p-2 rounded-lg">
+        <button (click)="abrirModal(recurso)"
+                class="bg-red-300 hover:text-white text-black p-2 rounded-lg hover:bg-red-600 mt-4 shadow-md border border-red-400">
           Reservar
         </button>
 
@@ -85,3 +88,9 @@
   </div>
 
 </div>
+
+<app-reserva-modal
+  [abierto]="modalAbierto"
+  (cerrar)="cerrarModal()"
+  [recursoNombre]= "recursoSeleccionado!"
+></app-reserva-modal>
