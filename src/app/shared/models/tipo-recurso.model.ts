@@ -1,7 +1,12 @@
 export interface TipoRecurso {
-  nombre_tipo_recurso: string;
-  codigo_tipo_recurso: string;
-  descripcion_tipo_recurso: string;
-  horario_disponibilidad: string;
-  id_tipo_recurso: number;
+  tipo_recurso: {
+    id_tipo_recurso: number;
+    nombre_tipo_recurso: string;
+    codigo_tipo_recurso: string;
+  };
+  unidad: {
+    id_unidad: number;
+    nombre_unidad: string;
+  };
+  horario: string;
 }

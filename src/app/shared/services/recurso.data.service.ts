@@ -15,11 +15,12 @@ export class RecursoDataService {
     }
 
     getAllRecursos(skip: number, limit: number, filtros: any): Observable<Recurso[]> {
-    return this.http
-        .doPost<Recurso[]>(`${environment.apiUrl}recurso/?skip=${skip}&limit=${limit}`, filtros)
-        .pipe(
-        map(recursos => recursos.map(r => this.mapRecurso(r)))
-        );
+        return this.http
+            .doPost<any[]>(
+            `${environment.apiUrl}recurso/?skip=${skip}&limit=${limit}`,
+            filtros
+            )
+            .pipe(map(recursos => recursos.map(r => this.mapRecurso(r))));
     }
 
     getTiposRecursos(filtros: any): Observable<TipoRecurso[]> {
@@ -37,20 +38,21 @@ export class RecursoDataService {
     }
 
     private mapRecurso(data: any): Recurso {
-        const horarioArray = Object.keys(data.horario_disponible || {}).map(dia => ({
-            dia,
-            horarios: [
-            {
-                hora_inicio: data.horario_disponible[dia].hora_inicio,
-                hora_fin: data.horario_disponible[dia].hora_fin
-            }
-            ]
-        }));
-
         return {
-            ...data,
-            horario_disponible: horarioArray
+            id_recurso: data.recurso.id_recurso,
+            nombre_recurso: data.recurso.nombre_recurso,
+            descripcion_recurso: data.recurso.descripcion_recurso,
+
+            id_tipo: data.tipo_recurso.id_tipo_recurso,
+            nombre_tipo: data.tipo_recurso.nombre_tipo_recurso,
+
+            id_unidad: data.unidad.id_unidad,
+            nombre_unidad: data.unidad.nombre_unidad,
+
+            foto_recurso: data.foto_recurso ?? null,
         };
     }
+
+
 
 }
