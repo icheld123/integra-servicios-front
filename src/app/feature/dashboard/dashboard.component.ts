@@ -1,7 +1,7 @@
 import { Component, Output } from '@angular/core';
 import { RecursoDataService } from '../../shared/services/recurso.data.service';
 import { Recurso } from '../../shared/models/recurso.model';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TipoRecurso } from '../../shared/models/tipo-recurso.model';
 
 @Component({
@@ -10,7 +10,11 @@ import { TipoRecurso } from '../../shared/models/tipo-recurso.model';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  @Output() recursoSeleccionado: Recurso | null = null;
+  recursoSeleccionado: Recurso | null = null;
+  horarioSeleccionado: string | null = null;
+  horaInicioSeleccionada: string = '';
+  horaFinSeleccionada: string = '';
+  fechaSeleccionada: string = '';
   recursos: Recurso[] = [];
   tiposRecursos: TipoRecurso[] = [];
   page: number = 1;
@@ -26,41 +30,67 @@ export class DashboardComponent {
   ) { 
     this.filter = this.fb.group({
       tipo: [''],
-      estado: [''],
+      disponibilidad_completa: [''],
       unidad: [''],
-      horario: ['']
+      hora_inicio: ['', [Validators.required]],
+      hora_fin: ['', [Validators.required]],
+      fecha_inicio: ['', [Validators.required]],
     });
-    this.getRecursos();
+    
     this.getTiposRecursos();
   }
 
   getRecursos() {
     this.skip = (this.page - 1) * this.limit;
 
+    const hoy = new Date();
+    const fechaISO = hoy.toISOString().split('T')[0];
+
     const filtros = {
-      estado_recurso: this.filter.value.estado || null,
-      id_tipo_recurso: this.filter.value.tipo ? Number(this.filter.value.tipo) : null,
-      id_unidad: this.filter.value.unidad || null
+      id_unidad: this.filter.value.unidad ? Number(this.filter.value.unidad) : 0,
+      id_tipo_recurso: this.filter.value.tipo ? Number(this.filter.value.tipo) : 0,
+
+      ventana_tiempo_inicio: this.filter.value.hora_inicio
+        ? `${fechaISO}T${this.filter.value.hora_inicio}:00.000Z`
+        : null,
+
+      ventana_tiempo_fin: this.filter.value.hora_fin
+        ? `${fechaISO}T${this.filter.value.hora_fin}:00.000Z`
+        : null,
+      disponibilidad_completa: this.filter.value.disponibilidad_completa || false,
     };
 
     this.recursoDataService
       .getAllRecursos(this.skip, this.limit, filtros)
       .subscribe((recursos) => {
         this.recursos = recursos;
+        
       });
   }
-
 
   getTiposRecursos() {
     const filtros = {
       horario_disponibilidad: this.filter.value.horario || null,
       id_unidad: this.filter.value.unidad || null
     };
+
     this.recursoDataService.getTiposRecursos(filtros)
       .subscribe(tipos => {
         this.tiposRecursos = tipos;
       });
   }
+
+  get filtroValido(): boolean {
+    const f = this.filter.value;
+
+    if (!f.fecha_inicio || !f.hora_inicio || !f.hora_fin) return false;
+
+    const horaInicio = f.hora_inicio;
+    const horaFin = f.hora_fin;
+
+    return horaFin > horaInicio;
+  }
+
 
   filterRecursos() {
     this.page = 1;
@@ -79,18 +109,27 @@ export class DashboardComponent {
     }
   }
 
-  ngOnInit() {
-    this.getRecursos();
-  }
-
-  reservarRecurso(recurso: Recurso) {
-    console.log('Recurso reservado:', recurso);
-  }
-
   abrirModal(recurso: Recurso) {
+    this.filter.updateValueAndValidity();
+
     this.recursoSeleccionado = recurso;
+
+    this.horarioSeleccionado = this.tiposRecursos.find(
+      t => t.tipo_recurso.id_tipo_recurso === recurso.id_tipo
+    )?.horario || null;
+
+    this.fechaSeleccionada = this.filter.get('fecha_inicio')?.value;
+    this.horaInicioSeleccionada = this.filter.get('hora_inicio')?.value;
+    this.horaFinSeleccionada = this.filter.get('hora_fin')?.value;
+
+    console.log("FECHA:", this.fechaSeleccionada);
+    console.log("HORA INICIO:", this.horaInicioSeleccionada);
+    console.log("HORA FIN:", this.horaFinSeleccionada);
+
     this.modalAbierto = true;
   }
+
+
 
   cerrarModal() {
     this.modalAbierto = false;

@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { Recurso } from '../../shared/models/recurso.model';
 import { RecursoNuevo } from '../../shared/models/reserva.model';
 import { ToastrService } from 'ngx-toastr';
 import { RecursoDataService } from '../../shared/services/recurso.data.service';
-
+import { HORARIOS } from '../../shared/constants/horarios';
 
 @Component({
   selector: 'app-reserva-modal',
@@ -15,7 +15,12 @@ import { RecursoDataService } from '../../shared/services/recurso.data.service';
 export class ReservaModalComponent {
   @Input() abierto = false;
   @Output() cerrar = new EventEmitter<void>();
-  @Input() recursoNombre: Recurso = {} as Recurso;
+  @Input() recurso: Recurso = {} as Recurso;
+  @Input() horario: string = '';
+  @Input() horaInicio: string = '';
+  @Input() horaFin: string = '';
+  @Input() fecha: string = '';
+
 
   reservaForm: FormGroup;
   loading = false;
@@ -30,71 +35,62 @@ export class ReservaModalComponent {
   ) {
 
     this.reservaForm = this.fb.group({
-      fecha_inicio: ['', [Validators.required]],
-      fecha_fin: ['', [Validators.required]],
-      hora_inicio: ['', [Validators.required]],
-      hora_fin: ['', [Validators.required]],
+      fecha_inicio: ['', Validators.required],
+      hora_inicio: [{ value: ''}, Validators.required],
+      hora_fin: [{ value: '' }, Validators.required],
     });
   }
 
-  private getDiaSemana(fecha: Date): string {
-    const dias = [
-      "Domingo", "Lunes", "Martes", "Miércoles",
-      "Jueves", "Viernes", "Sabado"
-    ];
-    return dias[fecha.getDay()];
-  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.fecha) {
+      this.reservaForm.patchValue({
+        fecha_inicio: new Date(this.fecha)
+      });
+      this.reservaForm.get('fecha_inicio')?.disable();
+    }
 
-  private horaEnRango(hora: string, inicio: string, fin: string): boolean {
-    const h = hora + ":00"; // convertir "8:00" en "8:00:00"
-    return h >= inicio && h <= fin;
+    if (this.horaInicio && this.horaFin) {
+      this.reservaForm.get('hora_inicio')?.disable();
+      this.reservaForm.get('hora_fin')?.disable();
+
+      this.reservaForm.patchValue({
+        hora_inicio: this.horaInicio.substring(0, 5),
+        hora_fin: this.horaFin.substring(0, 5),
+      });
+    }
   }
 
   procesarReserva() {
     if (this.reservaForm.invalid) return;
 
-    const fechaInicio = this.reservaForm.get('fecha_inicio')?.value;
-    const horaInicio = this.reservaForm.get('hora_inicio')?.value;
-    const fechaFin = this.reservaForm.get('fecha_fin')?.value;
-    const horaFin = this.reservaForm.get('hora_fin')?.value;
+    const fechaControl = this.reservaForm.get('fecha_inicio')?.value;
+    const fechaISO = new Date(fechaControl).toISOString().split('T')[0]; // "YYYY-MM-DD"
 
-    const diaInicio = this.getDiaSemana(fechaInicio);
-    const diaFin = this.getDiaSemana(fechaFin);
+    const fecha_inicio_transaccion = `${fechaISO} ${this.horaInicio}`;
+    const fecha_fin_transaccion    = `${fechaISO} ${this.horaFin}`;
 
-    const horarioDiaInicio = this.recursoNombre.horario_disponible?.find(h => h.dia === diaInicio);
-    const horarioDiaFin = this.recursoNombre.horario_disponible?.find(h => h.dia === diaFin);
-
-    // VALIDACIÓN DE HORARIOS
-    if (!horarioDiaInicio || !this.horaEnRango(horaInicio, horarioDiaInicio.horarios[0].hora_inicio, horarioDiaInicio.horarios[0].hora_fin)) {
-      this.errorMessage = `La hora de inicio no está dentro del horario permitido para ${diaInicio}.`;
-      return;
-    }
-
-    if (!horarioDiaFin || !this.horaEnRango(horaFin, horarioDiaFin.horarios[0].hora_inicio, horarioDiaFin.horarios[0].hora_fin)) {
-      this.errorMessage = `La hora de fin no está dentro del horario permitido para ${diaFin}.`;
-      return;
-    }
-
-    // SI TODO ES VÁLIDO → permitir el envío
     const ReservaData: RecursoNuevo = {
-      fecha_inicio_transaccion: this.formato(fechaInicio, horaInicio),
-      fecha_fin_transaccion: this.formato(fechaFin, horaFin),
+      fecha_inicio_transaccion,
+      fecha_fin_transaccion,
       estado_transaccion: 'PENDIENTE',
       falla_servicio: '1',
       id_tipo_transaccion: 1,
       id_usuario: this.authService.getCurrentUser()!.id_usuario,
-      id_recurso: this.recursoNombre.id_recurso
+      id_recurso: this.recurso.id_recurso
     };
 
     this.recursoDataService.createReserva(ReservaData).subscribe({
-      next: () => this.toastr.success('¡Reserva generada!', 'Éxito'),
+      next: () => {
+        this.toastr.success('¡Reserva generada!', 'Éxito')
+        this.close();
+        
+      },
       error: () => {
         this.errorMessage = 'Error al generar la reserva. Inténtalo de nuevo.';
-        this.toastr.error(this.errorMessage, 'Error');
+        this.toastr.error(this.errorMessage, 'Error', { timeOut: 10000 });
       }
     });
   }
-
 
   formato(fecha: Date, hora: string) {
     const y = fecha.getFullYear();
@@ -103,7 +99,6 @@ export class ReservaModalComponent {
     return `${y}-${m}-${d} ${hora}`;
   }
   
-
   close() {
     this.cerrar.emit();
     this.reservaForm.reset();

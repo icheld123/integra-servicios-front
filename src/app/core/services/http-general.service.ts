@@ -21,14 +21,16 @@ export class HttpgeneralService {
 
   public validateContentType(contentTypeValue?: string){
     let header = this.getHeader();
-    if(contentTypeValue){
-      header.append('Content-Type', `${contentTypeValue}`)
+
+    if (contentTypeValue) {
+        header = header.append('Content-Type', contentTypeValue);
+    } else {
+        header = header.append('Content-Type', 'application/json');
     }
-    else{
-      header.append('Content-Type', 'application/json')
-    }
+
     return header;
   }
+
 
   public doPost<T>(endpoint: string, body: any,  data?: any, contentTypeHeader?: string): Observable<T>{
     return this.http.post<T>(endpoint, body, {params: data, headers: this.validateContentType(contentTypeHeader)}) as Observable<T>;

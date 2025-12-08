@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatSelectModule} from '@angular/material/select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -48,6 +49,7 @@ import { ReservaModalComponent } from './feature/reserva-modal/reserva-modal.com
     BrowserAnimationsModule,
     FormsModule,
     MatCheckboxModule,
+    MatSelectModule,
     ToastrModule.forRoot(),
   ],
   providers: [
