@@ -14,17 +14,10 @@
          alt="" class="h-32 mx-auto mb-4">
 
     <h2 class="text-2xl font-bold mb-4 text-center">
-      Reserva de recurso {{ recurso.nombre_recurso }}
+      Editar reserva
     </h2>
 
-    <div *ngIf="errorMessage" class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
-      {{ errorMessage }}
-    </div>
-    <div *ngIf="successMessage" class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm">
-      {{ successMessage }}
-    </div>
-
-    <form [formGroup]="reservaForm" (ngSubmit)="procesarReserva()" class="space-y-4 text-center">
+    <form [formGroup]="reservaForm" (ngSubmit)="editar()" class="space-y-4 text-center">
 
       <div class="">
         <mat-form-field class="flex-1">
@@ -44,11 +37,18 @@
           <input matInput type="time" formControlName="hora_fin">
         </mat-form-field>
 
+        <mat-form-field>
+          <mat-label>Estado actual</mat-label>
+          <mat-select formControlName="estado">
+            <mat-option *ngFor="let est of estadosLista" [value]="est.id">{{est.nombre}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
       </div>
       <div class="flex justify-center">
         <button type="submit"
                 class="w-24 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white py-2 rounded-full text-lg font-semibold">
-          Reservar
+          Guardar
         </button>
       </div>
     </form>

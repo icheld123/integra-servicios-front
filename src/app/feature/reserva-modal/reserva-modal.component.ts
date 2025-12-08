@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { Recurso } from '../../shared/models/recurso.model';
-import { RecursoNuevo } from '../../shared/models/reserva.model';
+import { ReservaNueva } from '../../shared/models/reserva.model';
 import { ToastrService } from 'ngx-toastr';
 import { RecursoDataService } from '../../shared/services/recurso.data.service';
 import { HORARIOS } from '../../shared/constants/horarios';
@@ -23,7 +23,6 @@ export class ReservaModalComponent {
 
 
   reservaForm: FormGroup;
-  loading = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
@@ -69,7 +68,7 @@ export class ReservaModalComponent {
     const fecha_inicio_transaccion = `${fechaISO} ${this.horaInicio}`;
     const fecha_fin_transaccion    = `${fechaISO} ${this.horaFin}`;
 
-    const ReservaData: RecursoNuevo = {
+    const ReservaData: ReservaNueva = {
       fecha_inicio_transaccion,
       fecha_fin_transaccion,
       estado_transaccion: 'PENDIENTE',
