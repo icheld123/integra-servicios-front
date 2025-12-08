@@ -11,6 +11,9 @@ import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSelectModule} from '@angular/material/select';
+import {MatTabsModule} from '@angular/material/tabs';
+import {TextFieldModule} from '@angular/cdk/text-field';
+import {MatTableModule} from '@angular/material/table';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +28,8 @@ import { AuthService } from './core/services/auth/auth.service';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { HttpgeneralService } from './core/services/http-general.service';
 import { ReservaModalComponent } from './feature/reserva-modal/reserva-modal.component';
+import { MiPerfilComponent } from './feature/mi-perfil/mi-perfil.component';
+import { EditarReservaModalComponent } from './feature/editar-reserva-modal/editar-reserva-modal.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +42,8 @@ import { ReservaModalComponent } from './feature/reserva-modal/reserva-modal.com
     CarruselInicioComponent,
     DashboardComponent,
     ReservaModalComponent,
+    MiPerfilComponent,
+    EditarReservaModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +57,9 @@ import { ReservaModalComponent } from './feature/reserva-modal/reserva-modal.com
     FormsModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatTabsModule,
+    TextFieldModule,
+    MatTableModule,
     ToastrModule.forRoot(),
   ],
   providers: [

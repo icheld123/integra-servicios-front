@@ -4,7 +4,7 @@ import { HttpgeneralService } from '../../core/services/http-general.service';
 import { environment } from '../../../assets/environment/env';
 import { Recurso } from '../models/recurso.model';
 import { TipoRecurso } from '../models/tipo-recurso.model';
-import { RecursoNuevo } from '../models/reserva.model';
+import { ReservaNueva } from '../models/reserva.model';
 
 
 @Injectable({
@@ -30,12 +30,13 @@ export class RecursoDataService {
         );
     }
 
-    createReserva(body: RecursoNuevo) {
+    createReserva(body: ReservaNueva) {
         return this.http.doPost(
             `${environment.apiUrl}transaccion/create`,
             body
         );
     }
+    
 
     private mapRecurso(data: any): Recurso {
         return {

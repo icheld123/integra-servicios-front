@@ -122,14 +122,8 @@ export class DashboardComponent {
     this.horaInicioSeleccionada = this.filter.get('hora_inicio')?.value;
     this.horaFinSeleccionada = this.filter.get('hora_fin')?.value;
 
-    console.log("FECHA:", this.fechaSeleccionada);
-    console.log("HORA INICIO:", this.horaInicioSeleccionada);
-    console.log("HORA FIN:", this.horaFinSeleccionada);
-
     this.modalAbierto = true;
   }
-
-
 
   cerrarModal() {
     this.modalAbierto = false;
