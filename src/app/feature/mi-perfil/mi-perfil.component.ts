@@ -62,7 +62,6 @@ export class MiPerfilComponent {
     this.reservaData.getReservas(filtros)
       .subscribe(reservas => {
         this.reservas = reservas;
-        console.log(this.reservas)
     });
   }
 

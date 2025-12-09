@@ -14,6 +14,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTabsModule} from '@angular/material/tabs';
 import {TextFieldModule} from '@angular/cdk/text-field';
 import {MatTableModule} from '@angular/material/table';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { SurveyModule } from "survey-angular-ui";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,6 +32,9 @@ import { HttpgeneralService } from './core/services/http-general.service';
 import { ReservaModalComponent } from './feature/reserva-modal/reserva-modal.component';
 import { MiPerfilComponent } from './feature/mi-perfil/mi-perfil.component';
 import { EditarReservaModalComponent } from './feature/editar-reserva-modal/editar-reserva-modal.component';
+import { PrestamoComponent } from './feature/prestamo/prestamo.component';
+import { ConfirmarAccionComponent } from './feature/confirmar-accion/confirmar-accion.component';
+import { DevolucionModalComponent } from './feature/devolucion-modal/devolucion-modal.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +49,9 @@ import { EditarReservaModalComponent } from './feature/editar-reserva-modal/edit
     ReservaModalComponent,
     MiPerfilComponent,
     EditarReservaModalComponent,
+    PrestamoComponent,
+    ConfirmarAccionComponent,
+    DevolucionModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +68,8 @@ import { EditarReservaModalComponent } from './feature/editar-reserva-modal/edit
     MatTabsModule,
     TextFieldModule,
     MatTableModule,
+    SurveyModule,
+    MatAutocompleteModule,
     ToastrModule.forRoot(),
   ],
   providers: [
