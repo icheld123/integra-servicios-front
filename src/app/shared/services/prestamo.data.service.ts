@@ -23,4 +23,11 @@ export class PrestamoDataService {
             body
         );
     }
+
+    enviarEncuesta(body: any): Observable<any> {
+        return this.http.doPost<any[]>(
+            `${environment.apiUrl}calificacion/create`,
+            body
+        );
+    }
 }

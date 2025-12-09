@@ -88,7 +88,6 @@ export class PanelAdminComponent {
         this.toastr.error("Error creando el usuario.");
       } 
     });
-
   }
 
   crearTipoRecurso(){

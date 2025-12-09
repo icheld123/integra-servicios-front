@@ -36,6 +36,7 @@ import { PrestamoComponent } from './feature/prestamo/prestamo.component';
 import { ConfirmarAccionComponent } from './feature/confirmar-accion/confirmar-accion.component';
 import { DevolucionModalComponent } from './feature/devolucion-modal/devolucion-modal.component';
 import { PanelAdminComponent } from './feature/panel-admin/panel-admin.component';
+import { EncuestaModalComponent } from './feature/encuesta-modal/encuesta-modal.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { PanelAdminComponent } from './feature/panel-admin/panel-admin.component
     PrestamoComponent,
     ConfirmarAccionComponent,
     DevolucionModalComponent,
-    PanelAdminComponent
+    PanelAdminComponent,
+    EncuestaModalComponent
   ],
   imports: [
     BrowserModule,

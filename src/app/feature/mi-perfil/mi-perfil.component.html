@@ -53,7 +53,7 @@
                 <!-- Estado -->
                 <ng-container matColumnDef="estado">
                     <th mat-header-cell *matHeaderCellDef> Estado </th>
-                    <td mat-cell *matCellDef="let r"> {{ r.estado_actual }} </td>
+                    <td mat-cell *matCellDef="let r"> {{ r.estado_actual.nombre_estado_transaccion }} </td>
                 </ng-container>
 
                 <!-- Recurso -->
@@ -90,8 +90,9 @@
 
                 <ng-container matColumnDef="editar">
                     <th mat-header-cell *matHeaderCellDef> Acciones </th>
-                    <td mat-cell *matCellDef="let r">
-                        <button class="cursor-pointer bg-gray-300 hover:bg-red-700 hover:text-white p-2 rounded" (click)="editarReserva(r)">Editar</button>
+                    <td mat-cell *matCellDef="let r" class="flex justify-center">
+                        <button class="cursor-pointer bg-gray-300 hover:bg-red-700 hover:text-white p-2 m-2 rounded" (click)="editarReserva(r)">Editar</button>
+                        <button class="cursor-pointer bg-gray-300 hover:bg-red-700 hover:text-white p-2 m-2 rounded" (click)="calificar(r)">Calificar</button>
                     </td>
                 </ng-container>
 
@@ -103,7 +104,14 @@
     </mat-tab>
 </mat-tab-group>
 <app-editar-reserva-modal
-[abierto]="modalAbierto"
+[abierto]="modalEditarAbierto"
+[reserva]="reservaSeleccionada"
+(cerrar)="cerrarModal()"
+(reservaActualizada)="getAllReservas()">
+</app-editar-reserva-modal>
+
+<app-encuesta-modal
+[abierto]="modalEncuestaAbierto"
 [reserva]="reservaSeleccionada"
 (cerrar)="cerrarModal()">
-</app-editar-reserva-modal>
+</app-encuesta-modal>
