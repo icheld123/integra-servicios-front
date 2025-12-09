@@ -35,6 +35,7 @@ import { EditarReservaModalComponent } from './feature/editar-reserva-modal/edit
 import { PrestamoComponent } from './feature/prestamo/prestamo.component';
 import { ConfirmarAccionComponent } from './feature/confirmar-accion/confirmar-accion.component';
 import { DevolucionModalComponent } from './feature/devolucion-modal/devolucion-modal.component';
+import { PanelAdminComponent } from './feature/panel-admin/panel-admin.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { DevolucionModalComponent } from './feature/devolucion-modal/devolucion-
     PrestamoComponent,
     ConfirmarAccionComponent,
     DevolucionModalComponent,
+    PanelAdminComponent
   ],
   imports: [
     BrowserModule,

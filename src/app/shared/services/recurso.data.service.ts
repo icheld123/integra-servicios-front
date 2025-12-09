@@ -37,6 +37,22 @@ export class RecursoDataService {
         );
     }
 
+    createRecurso(formData: FormData) {
+        return this.http.doPost(
+            `${environment.apiUrl}recurso/create`,
+            formData, 
+            undefined,
+            undefined
+        );
+    }
+
+    createTipoRecurso(body: any) {
+        return this.http.doPost(
+            `${environment.apiUrl}tipo_recurso/create`,
+            body
+        );
+    }
+
     private mapRecurso(data: any): Recurso {
         return {
             id_recurso: data.recurso.id_recurso,
