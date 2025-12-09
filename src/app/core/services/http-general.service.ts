@@ -10,14 +10,14 @@ export class HttpgeneralService {
     public authService: AuthService
   ) {}
 
-    public getHeader(){
-        const token = this.authService.getToken();
+  public getHeader(){
+      const token = this.authService.getToken();
 
-        let headers = new HttpHeaders({
-            'Authorization': `Bearer ${token}`
-        });
-        return headers;
-    }
+      let headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+      });
+      return headers;
+  }
 
   public validateContentType(contentTypeValue?: string){
     let header = this.getHeader();

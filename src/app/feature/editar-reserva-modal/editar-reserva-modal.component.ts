@@ -36,7 +36,7 @@ export class EditarReservaModalComponent {
 
       const estadoId = Number(
         Object.keys(ESTADOS).find(
-          key => ESTADOS[key].toLowerCase() === this.reserva!.estado_actual.toLowerCase()
+          key => ESTADOS[key].toLowerCase() === this.reserva!.estado_actual
         )
       ) || null;
       this.reservaForm.patchValue({
