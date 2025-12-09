@@ -20,7 +20,7 @@ export class UsuarioDataService {
 
     createUsuario(body: any): Observable<any> {
         return this.http.doPost<any[]>(
-            `${environment.apiUrl}usuario/`,
+            `${environment.apiUrl}usuario/sing-in`,
             body
         );
     }

@@ -89,7 +89,7 @@ export class EditarReservaModalComponent {
       },
       error: () => {
         this.errorMessage = 'Error al actualizar la reserva. Inténtalo de nuevo.';
-        this.toastr.error(this.errorMessage, 'Error', { timeOut: 10000 });
+        this.toastr.error(this.errorMessage, 'Error');
       }
     });
   }

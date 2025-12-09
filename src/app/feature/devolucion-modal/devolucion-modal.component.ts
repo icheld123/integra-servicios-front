@@ -51,8 +51,8 @@ export class DevolucionModalComponent {
         this.devolucionCompletada = true;
         this.cerrar.emit();
       },
-      error: () => {
-        this.toastr.error("Error registrando la encuesta.");
+      error: (e) => {
+        this.toastr.error(e.error.detail,"Error.");
       }
     });
   }
