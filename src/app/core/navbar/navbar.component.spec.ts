@@ -107,7 +107,7 @@ describe('NavbarComponent', () => {
     fixture.detectChanges();
     
     const compiled = fixture.nativeElement;
-    expect(compiled.textContent).toContain('Usuario: Test User');
+    expect(compiled.textContent).toContain('¡Hola de nuevo, Test User!');
   });
 
   it('should display logout button when logged in', () => {
