@@ -16,7 +16,8 @@ export class MiPerfilComponent {
   reservaSeleccionada: Reserva | null = null;
   usuarioForm: FormGroup;
   editando: boolean = false;
-  modalAbierto = false;
+  modalEditarAbierto = false;
+  modalEncuestaAbierto = false;
 
   displayedColumns: string[] = [
     'transaccion',
@@ -62,7 +63,6 @@ export class MiPerfilComponent {
     this.reservaData.getReservas(filtros)
       .subscribe(reservas => {
         this.reservas = reservas;
-        console.log(this.reservas)
     });
   }
 
@@ -81,7 +81,7 @@ export class MiPerfilComponent {
 
   editarReserva(reserva: Reserva){
     this.reservaSeleccionada = reserva;
-    this.modalAbierto = true;
+    this.modalEditarAbierto = true;
   }
 
   editar() {
@@ -117,8 +117,14 @@ export class MiPerfilComponent {
     }
   }
 
+  calificar(reserva: Reserva) {
+    this.reservaSeleccionada = reserva;
+    this.modalEncuestaAbierto = true;
+  }
+
   cerrarModal() {
-    this.modalAbierto = false;
+    this.modalEncuestaAbierto = false;
+    this.modalEditarAbierto = false;
   }
   
 }

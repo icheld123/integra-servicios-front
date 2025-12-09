@@ -31,24 +31,25 @@
 
         </button>
 
-        <!-- Si no hay usuario, mostrar "Empezar ahora" -->
         <a *ngIf="!usuarioLogueado"
           (click)="abrirModal()"
           class="rounded-lg px-4 py-2 font-medium text-black cursor-pointer bg-red-500 hover:bg-red-600 hover:text-white">
           Empezar ahora
         </a>
-
-        <!-- Si hay usuario, mostrar nombre y botón de logout -->
+        <p *ngIf="usuarioLogueado" class="text-sm text-gray-700">¡Hola de nuevo, {{  usuarioLogueado.nombre}} {{usuarioLogueado.apellido}}!</p>
+        <button *ngIf="usuarioLogueado && usuarioLogueado.id_tipo_usuario == 4" routerLink="/dashboard" class="rounded-lg px-4 py-2 font-medium text-white cursor-pointer bg-red-700 hover:bg-red-600">Ver recursos</button>
+        <button *ngIf="usuarioLogueado && usuarioLogueado.id_tipo_usuario != 4 && usuarioLogueado.id_tipo_usuario != 1" routerLink="/genera-prestamo" class="rounded-lg px-4 py-2 font-medium text-white cursor-pointer bg-red-700 hover:bg-red-600">Transacciones</button>
+        <button *ngIf="usuarioLogueado && usuarioLogueado.id_tipo_usuario == 1" routerLink="/administracion" class="rounded-lg px-4 py-2 font-medium text-white cursor-pointer bg-red-700 hover:bg-red-600">Administración</button>
+        <button *ngIf="usuarioLogueado" routerLink="/mi-perfil" class="rounded-lg px-4 py-2 font-medium text-white cursor-pointer bg-red-700 hover:bg-red-600">Mi perfil</button>
+        
         <div *ngIf="usuarioLogueado" class="flex items-center space-x-3">
-          <p class="text-sm text-gray-700">¡Hola de nuevo, {{  usuarioLogueado.nombre}} {{usuarioLogueado.apellido}}!</p>
+          
           <button (click)="logout()"
                   class="rounded-lg px-4 py-2 font-medium text-white bg-red-700 hover:bg-red-600">
             Cerrar sesión
           </button>
         </div>
-
-        <button *ngIf="usuarioLogueado" routerLink="/dashboard" class="rounded-lg px-4 py-2 font-medium text-white cursor-pointer bg-red-700 hover:bg-red-600">Ver recursos</button>
-        <button *ngIf="usuarioLogueado" routerLink="/mi-perfil" class="rounded-lg px-4 py-2 font-medium text-white cursor-pointer bg-red-700 hover:bg-red-600">Mi perfil</button>
+      
       </div>
     </div>
   </div>

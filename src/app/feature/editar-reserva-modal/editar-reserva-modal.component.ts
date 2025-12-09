@@ -14,6 +14,7 @@ export class EditarReservaModalComponent {
   @Input() abierto = false;
   @Input() reserva: Reserva | null = null;
   @Output() cerrar = new EventEmitter<void>();
+  @Output() reservaActualizada = new EventEmitter<void>();
   errorMessage: string | null = null;
   estadosLista: { id: number, nombre: string }[] = [];
 
@@ -24,7 +25,6 @@ export class EditarReservaModalComponent {
     private toastr: ToastrService
   ){
     this.reservaForm = this.fb.group({
-      estado: [null, Validators.required],
       fecha_inicio: ['', Validators.required],
       hora_inicio: [{ value: ''}, Validators.required],
       hora_fin: [{ value: '' }, Validators.required],
@@ -36,11 +36,10 @@ export class EditarReservaModalComponent {
 
       const estadoId = Number(
         Object.keys(ESTADOS).find(
-          key => ESTADOS[key].toLowerCase() === this.reserva!.estado_actual.toLowerCase()
+          key => ESTADOS[key].toLowerCase() === this.reserva!.estado_actual
         )
       ) || null;
       this.reservaForm.patchValue({
-        estado: estadoId,
         fecha_inicio: new Date(this.reserva.fechas.fecha_inicio_transaccion),
         hora_inicio: this.extraerHora(this.reserva.fechas.fecha_inicio_transaccion),
         hora_fin: this.extraerHora(this.reserva.fechas.fecha_fin_transaccion)
@@ -79,21 +78,18 @@ export class EditarReservaModalComponent {
     const reservaData = {
       fecha_inicio_transaccion: fecha_inicio_transaccion,
       fecha_fin_transaccion: fecha_fin_transaccion,
-      estado_transaccion: this.reservaForm.get('estado')?.value,
-      falla_servicio: this.reserva.falla_servicio,
-      id_usuario: this.reserva.usuario.id_usuario,
-      id_recurso: this.reserva.recurso.id_recurso,
-      id_empleado_responsable: 0   
+      id_transaccion: this.reserva.transaccion,
+      id_usuario: this.reserva.usuario.id_usuario,  
     };
-    this.reservaService.updateReserva(this.reserva.transaccion, reservaData).subscribe({
+    this.reservaService.updateReserva(reservaData).subscribe({
       next: () => {
         this.toastr.success('¡Reserva actualizada!', 'Éxito')
+        this.reservaActualizada.emit();
         this.close();
-        
       },
       error: () => {
         this.errorMessage = 'Error al actualizar la reserva. Inténtalo de nuevo.';
-        this.toastr.error(this.errorMessage, 'Error', { timeOut: 10000 });
+        this.toastr.error(this.errorMessage, 'Error');
       }
     });
   }
