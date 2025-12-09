@@ -84,8 +84,8 @@ export class PanelAdminComponent {
         this.toastr.success("¡Usuario creado exitosamente!");
         this.nuevoUsuarioForm.reset()
       },
-      error: () => {
-        this.toastr.error("Error creando el usuario.");
+      error: (e) => {
+        this.toastr.error(e.error.detail,"Error.");
       } 
     });
   }
@@ -104,8 +104,8 @@ export class PanelAdminComponent {
         this.toastr.success("¡Tipo de recurso creado exitosamente!");
         this.nuevoTipoRecursoForm.reset()
       },
-      error: () => {
-        this.toastr.error("Error creando el tipo de recurso.");
+      error: (e) => {
+        this.toastr.error(e.error.detail,"Error.");
       } 
     });
   }
@@ -121,8 +121,8 @@ export class PanelAdminComponent {
         this.toastr.success("¡Nueva unidad creada exitosamente!");
         this.nuevaUnidadForm.reset()
       },
-      error: () => {
-        this.toastr.error("Error creando la unidad.");
+      error: (e) => {
+        this.toastr.error(e.error.detail,"Error.");
       } 
     });
   }  
@@ -172,8 +172,8 @@ export class PanelAdminComponent {
         this.toastr.success("¡Recurso creado exitosamente!");
         this.nuevoRecursoForm.reset()
       },
-      error: () => {
-        this.toastr.error("Error creando el recurso.");
+      error: (e) => {
+        this.toastr.error(e.error.detail,"Error.");
       }
     });
   }

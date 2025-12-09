@@ -49,7 +49,7 @@ export class ConfirmarAccionComponent {
         
       },
       error: (e) => {
-        this.toastr.error(e.error.detail, 'Error', { timeOut: 10000 });
+        this.toastr.error(e.error.detail,"Error.");
       }
     });
   }
