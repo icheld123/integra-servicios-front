@@ -63,11 +63,20 @@ export class EditarReservaModalComponent {
     return fechaISO.substring(0, 10);
   }
 
+  private dateToStringYYYYMMDD(date: Date | string): string {
+    if (typeof date === 'string') {
+      return date.substring(0, 10);
+    }
+    const iso = date.toISOString();
+    return iso.substring(0, 10);
+  }
 
   editar() {
     if (!this.reserva || this.reservaForm.invalid) return;
 
-    const fechaBase = this.extraerFecha(this.reserva.fechas.fecha_inicio_transaccion);
+    // Convertir la fecha del formulario a string YYYY-MM-DD
+    const fechaValor = this.reservaForm.get('fecha_inicio')?.value;
+    const fechaBase = this.dateToStringYYYYMMDD(fechaValor);
 
     const nuevaHoraInicio = this.reservaForm.get('hora_inicio')?.value;
     const nuevaHoraFin = this.reservaForm.get('hora_fin')?.value;

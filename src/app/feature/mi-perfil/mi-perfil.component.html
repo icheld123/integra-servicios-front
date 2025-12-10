@@ -91,8 +91,20 @@
                 <ng-container matColumnDef="editar">
                     <th mat-header-cell *matHeaderCellDef> Acciones </th>
                     <td mat-cell *matCellDef="let r" class="flex justify-center">
-                        <button class="cursor-pointer bg-gray-300 hover:bg-red-700 hover:text-white p-2 m-2 rounded" (click)="editarReserva(r)">Editar</button>
-                        <button class="cursor-pointer bg-gray-300 hover:bg-red-700 hover:text-white p-2 m-2 rounded" (click)="calificar(r)">Calificar</button>
+                        <!-- Botón Editar: solo si estado es "Reservada" -->
+                        <button 
+                            *ngIf="r.estado_actual.nombre_estado_transaccion === 'Reservada'"
+                            class="cursor-pointer bg-gray-300 hover:bg-red-700 hover:text-white p-2 m-2 rounded" 
+                            (click)="editarReserva(r)">
+                            Editar
+                        </button>
+                        <!-- Botón Calificar: solo si estado es "Completada" -->
+                        <button 
+                            *ngIf="r.estado_actual.nombre_estado_transaccion === 'Completada'"
+                            class="cursor-pointer bg-gray-300 hover:bg-red-700 hover:text-white p-2 m-2 rounded" 
+                            (click)="calificar(r)">
+                            Calificar
+                        </button>
                     </td>
                 </ng-container>
 
