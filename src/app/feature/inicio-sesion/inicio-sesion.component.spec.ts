@@ -5,6 +5,7 @@ import { of, throwError } from 'rxjs';
 import { InicioSesionComponent } from './inicio-sesion.component';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { UsuarioDataService } from '../../shared/services/usuario.data.service';
 import { Usuario } from '../../shared/models/usuario.model';
 
 describe('InicioSesionComponent', () => {
@@ -12,17 +13,20 @@ describe('InicioSesionComponent', () => {
   let fixture: ComponentFixture<InicioSesionComponent>;
   let authService: jasmine.SpyObj<AuthService>;
   let toastrService: jasmine.SpyObj<ToastrService>;
+  let usuarioDataService: jasmine.SpyObj<UsuarioDataService>;
 
   beforeEach(async () => {
     const authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
     const toastrServiceSpy = jasmine.createSpyObj('ToastrService', ['success', 'error']);
+    const usuarioDataServiceSpy = jasmine.createSpyObj('UsuarioDataService', ['createUsuario']);
 
     await TestBed.configureTestingModule({
       declarations: [InicioSesionComponent],
       imports: [ReactiveFormsModule],
       providers: [
         { provide: AuthService, useValue: authServiceSpy },
-        { provide: ToastrService, useValue: toastrServiceSpy }
+        { provide: ToastrService, useValue: toastrServiceSpy },
+        { provide: UsuarioDataService, useValue: usuarioDataServiceSpy }
       ]
     })
     .compileComponents();
@@ -31,6 +35,7 @@ describe('InicioSesionComponent', () => {
     component = fixture.componentInstance;
     authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     toastrService = TestBed.inject(ToastrService) as jasmine.SpyObj<ToastrService>;
+    usuarioDataService = TestBed.inject(UsuarioDataService) as jasmine.SpyObj<UsuarioDataService>;
     
     fixture.detectChanges();
   });
@@ -173,14 +178,14 @@ describe('InicioSesionComponent', () => {
     const registroForm = component.registroForm;
     
     registroForm.patchValue({
-      password: 'password123',
+      contrasena: 'password123',
       confirmarPassword: 'password456'
     });
     
     expect(registroForm.hasError('passwordMismatch')).toBe(true);
     
     registroForm.patchValue({
-      password: 'password123',
+      contrasena: 'password123',
       confirmarPassword: 'password123'
     });
     
@@ -188,23 +193,104 @@ describe('InicioSesionComponent', () => {
   });
 
   it('should not submit registration if form is invalid', () => {
+    component.modoRegistro = true;
+    
+    // Leave the form empty (invalid)
     component.enviarRegistro();
-    expect(toastrService.error).toHaveBeenCalledWith('Por favor, completa todos los campos correctamente', 'Error');
+    
+    // Should set loading to true initially, but won't call service due to invalid form
+    expect(component.loading).toBe(true);
+    expect(usuarioDataService.createUsuario).not.toHaveBeenCalled();
   });
 
   it('should process valid registration form', () => {
+    usuarioDataService.createUsuario.and.returnValue(of({}));
+    spyOn(component.cerrar, 'emit');
+    
+    component.modoRegistro = true;
     component.registroForm.patchValue({
-      nombre: 'Test User',
-      email: 'test@test.com',
-      password: 'password123',
+      nombre: 'Test',
+      apellido: 'User', 
+      correo: 'test@test.com',
+      contrasena: 'password123',
       confirmarPassword: 'password123'
     });
     
     component.enviarRegistro();
     
-    expect(component.loading).toBe(true);
-    expect(component.errorMessage).toBeNull();
-    expect(component.successMessage).toBeNull();
+    expect(usuarioDataService.createUsuario).toHaveBeenCalledWith({
+      nombre: 'Test',
+      apellido: 'User',
+      correo: 'test@test.com',
+      contrasena: 'password123'
+    });
+  });
+
+  it('should handle registration success', () => {
+    usuarioDataService.createUsuario.and.returnValue(of({}));
+    spyOn(component.cerrar, 'emit');
+    spyOn(component.registroForm, 'reset');
+    
+    component.modoRegistro = true;
+    component.registroForm.patchValue({
+      nombre: 'Test',
+      apellido: 'User',
+      correo: 'test@test.com', 
+      contrasena: 'password123',
+      confirmarPassword: 'password123'
+    });
+    
+    component.enviarRegistro();
+    
+    expect(component.loading).toBe(false);
+    expect(toastrService.success).toHaveBeenCalledWith('Nuevo usuario registrado! Ya puede iniciar sesión.');
+    expect(component.registroForm.reset).toHaveBeenCalled();
+    expect(component.cerrar.emit).toHaveBeenCalled();
+  });
+
+  it('should handle registration error', () => {
+    const errorResponse = { error: { detail: 'Email already exists' } };
+    usuarioDataService.createUsuario.and.returnValue(throwError(errorResponse));
+    
+    component.modoRegistro = true;
+    component.registroForm.patchValue({
+      nombre: 'Test',
+      apellido: 'User',
+      correo: 'test@test.com',
+      contrasena: 'password123',
+      confirmarPassword: 'password123'
+    });
+    
+    component.enviarRegistro();
+    
+    expect(component.loading).toBe(false);
+    expect(toastrService.error).toHaveBeenCalledWith('Email already exists', 'Error.');
+  });
+
+  it('should show registration form when in register mode', () => {
+    component.abierto = true;
+    component.modoRegistro = true;
+    fixture.detectChanges();
+    
+    // Should show registration form, not login form
+    const registrationForm = fixture.nativeElement.querySelector('form[formGroup="registroForm"]');
+    const nameInput = fixture.nativeElement.querySelector('input[formControlName="nombre"]');
+    const emailInput = fixture.nativeElement.querySelector('input[formControlName="correo"]');
+    const loginForm = fixture.nativeElement.querySelector('form[formGroup="loginForm"]');
+    
+    expect(nameInput).toBeTruthy();
+    expect(emailInput).toBeTruthy();
+    expect(loginForm).toBeNull(); // Login form should not be present
+  });
+
+  it('should show registration button text when in register mode', () => {
+    component.abierto = true;
+    component.modoRegistro = true;
+    component.loading = false;
+    fixture.detectChanges();
+    
+    const button = fixture.nativeElement.querySelector('button[type="submit"]');
+    expect(button?.textContent?.trim()).toBe('Registrarme');
   });
 
   it('should close modal and reset messages', () => {
@@ -271,16 +357,17 @@ describe('InicioSesionComponent', () => {
     
     // Test required validators
     expect(registroForm.get('nombre')?.hasError('required')).toBe(true);
-    expect(registroForm.get('email')?.hasError('required')).toBe(true);
-    expect(registroForm.get('password')?.hasError('required')).toBe(true);
+    expect(registroForm.get('apellido')?.hasError('required')).toBe(true);
+    expect(registroForm.get('correo')?.hasError('required')).toBe(true);
+    expect(registroForm.get('contrasena')?.hasError('required')).toBe(true);
     expect(registroForm.get('confirmarPassword')?.hasError('required')).toBe(true);
     
     // Test email validator
-    registroForm.get('email')?.setValue('invalid-email');
-    expect(registroForm.get('email')?.hasError('email')).toBe(true);
+    registroForm.get('correo')?.setValue('invalid-email');
+    expect(registroForm.get('correo')?.hasError('email')).toBe(true);
     
     // Test password minlength
-    registroForm.get('password')?.setValue('12345'); // Less than 6 characters
-    expect(registroForm.get('password')?.hasError('minlength')).toBe(true);
+    registroForm.get('contrasena')?.setValue('12345'); // Less than 6 characters
+    expect(registroForm.get('contrasena')?.hasError('minlength')).toBe(true);
   });
 });

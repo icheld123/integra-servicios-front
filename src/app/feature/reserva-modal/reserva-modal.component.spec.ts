@@ -204,7 +204,8 @@ describe('ReservaModalComponent', () => {
   });
 
   it('should handle reservation error', () => {
-    recursoDataService.createReserva.and.returnValue(throwError('Error'));
+    const errorResponse = { error: { detail: 'Error en el servidor' } };
+    recursoDataService.createReserva.and.returnValue(throwError(errorResponse));
     
     component.reservaForm.patchValue({
       fecha_inicio: new Date('2025-12-08'),
@@ -214,11 +215,9 @@ describe('ReservaModalComponent', () => {
     
     component.procesarReserva();
     
-    expect(component.errorMessage).toBe('Error al generar la reserva. Inténtalo de nuevo.');
     expect(toastrService.error).toHaveBeenCalledWith(
-      'Error al generar la reserva. Inténtalo de nuevo.',
-      'Error',
-      { timeOut: 10000 }
+      'Error en el servidor',
+      'Error'
     );
   });
 

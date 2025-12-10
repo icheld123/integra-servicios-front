@@ -23,6 +23,17 @@ class MockEditarReservaModalComponent {
   @Input() abierto = false;
   @Input() reserva: Reserva | null = null;
   @Output() cerrar = new EventEmitter<void>();
+  @Output() reservaActualizada = new EventEmitter<void>();
+}
+
+@Component({
+  selector: 'app-encuesta-modal',
+  template: '<div></div>'
+})
+class MockEncuestaModalComponent {
+  @Input() abierto = false;
+  @Input() reserva: Reserva | null = null;
+  @Output() cerrar = new EventEmitter<void>();
 }
 
 describe('MiPerfilComponent', () => {
@@ -46,14 +57,17 @@ describe('MiPerfilComponent', () => {
   const mockReservas: Reserva[] = [
     {
       transaccion: 1,
-      estado_actual: 'PENDIENTE',
+      estado_actual: {
+        id_estado_transaccion: 1,
+        nombre_estado_transaccion: 'PENDIENTE'
+      },
       fechas: {
         fecha_inicio_transaccion: '2024-01-15T10:00:00Z',
         fecha_fin_transaccion: '2024-01-15T12:00:00Z',
         fecha_creacion: '2024-01-10T09:00:00Z'
       },
       recurso: {
-        id_recurso: 101,
+        id_recurso: '101',
         nombre_recurso: 'Sala de reuniones'
       },
       usuario: {
@@ -82,7 +96,7 @@ describe('MiPerfilComponent', () => {
     reservaSpy.updateReserva.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({
-      declarations: [MiPerfilComponent, MockEditarReservaModalComponent],
+      declarations: [MiPerfilComponent, MockEditarReservaModalComponent, MockEncuestaModalComponent],
       imports: [
         ReactiveFormsModule,
         MatTabsModule,
@@ -130,11 +144,16 @@ describe('MiPerfilComponent', () => {
   it('should load user data on init', () => {
     fixture.detectChanges();
     expect(component.usuarioLogueado).toEqual(mockUser);
+    expect(component.usuarioForm.get('nombre')?.value).toBe(mockUser.nombre);
+    expect(component.usuarioForm.get('apellido')?.value).toBe(mockUser.apellido);
+    expect(component.usuarioForm.get('correo')?.value).toBe(mockUser.sub);
   });
 
   it('should load reservas on init', () => {
     fixture.detectChanges();
-    expect(reservaDataServiceSpy.getReservas).toHaveBeenCalled();
+    expect(reservaDataServiceSpy.getReservas).toHaveBeenCalledWith({
+      id_usuario: mockUser.id_usuario
+    });
     expect(component.reservas).toEqual(mockReservas);
   });
 
@@ -147,8 +166,18 @@ describe('MiPerfilComponent', () => {
   it('should cancel editing', () => {
     fixture.detectChanges();
     component.editar();
+    
+    // Cambiar algunos valores
+    component.usuarioForm.patchValue({
+      nombre: 'Changed Name',
+      apellido: 'Changed Surname'
+    });
+    
     component.cancelar();
+    
     expect(component.editando).toBe(false);
+    expect(component.usuarioForm.get('nombre')?.value).toBe(mockUser.nombre);
+    expect(component.usuarioForm.get('apellido')?.value).toBe(mockUser.apellido);
   });
 
   it('should save changes when form is valid', () => {
@@ -164,18 +193,60 @@ describe('MiPerfilComponent', () => {
     expect(component.editando).toBe(false);
   });
 
-  it('should open modal when editarReserva is called', () => {
+  it('should not save changes when form is invalid', () => {
     fixture.detectChanges();
-    const reserva = mockReservas[0];
-    component.editarReserva(reserva);
+    component.editar();
+    component.usuarioForm.patchValue({
+      nombre: '',
+      apellido: '',
+      correo: 'invalid-email'
+    });
 
-    expect(component.reservaSeleccionada).toBe(reserva);
-    expect(component.modalAbierto).toBe(true);
+    component.guardar();
+    expect(component.editando).toBe(true); // Should remain in editing mode
   });
 
-  it('should close modal', () => {
-    component.modalAbierto = true;
+  it('should open edit reservation modal', () => {
+    fixture.detectChanges();
+    component.editarReserva(mockReservas[0]);
+    
+    expect(component.reservaSeleccionada).toEqual(mockReservas[0]);
+    expect(component.modalEditarAbierto).toBe(true);
+  });
+
+  it('should open survey modal', () => {
+    fixture.detectChanges();
+    component.calificar(mockReservas[0]);
+    
+    expect(component.reservaSeleccionada).toEqual(mockReservas[0]);
+    expect(component.modalEncuestaAbierto).toBe(true);
+  });
+
+  it('should close modals', () => {
+    fixture.detectChanges();
+    component.modalEditarAbierto = true;
+    component.modalEncuestaAbierto = true;
+    
     component.cerrarModal();
-    expect(component.modalAbierto).toBe(false);
+    
+    expect(component.modalEditarAbierto).toBe(false);
+    expect(component.modalEncuestaAbierto).toBe(false);
+  });
+
+  it('should disable form fields initially', () => {
+    fixture.detectChanges();
+    
+    expect(component.usuarioForm.get('nombre')?.disabled).toBe(true);
+    expect(component.usuarioForm.get('apellido')?.disabled).toBe(true);
+    expect(component.usuarioForm.get('correo')?.disabled).toBe(true);
+  });
+
+  it('should enable form fields when editing', () => {
+    fixture.detectChanges();
+    component.editar();
+    
+    expect(component.usuarioForm.get('nombre')?.disabled).toBe(false);
+    expect(component.usuarioForm.get('apellido')?.disabled).toBe(false);
+    expect(component.usuarioForm.get('correo')?.disabled).toBe(false);
   });
 });

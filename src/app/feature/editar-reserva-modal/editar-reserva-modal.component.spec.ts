@@ -21,14 +21,17 @@ describe('EditarReservaModalComponent', () => {
 
   const mockReserva: Reserva = {
     transaccion: 1,
-    estado_actual: 'PENDIENTE',
+    estado_actual: {
+      id_estado_transaccion: 1,
+      nombre_estado_transaccion: 'PENDIENTE'
+    },
     fechas: {
       fecha_inicio_transaccion: '2024-01-15T10:00:00Z',
       fecha_fin_transaccion: '2024-01-15T12:00:00Z',
       fecha_creacion: '2024-01-10T09:00:00Z'
     },
     recurso: {
-      id_recurso: 101,
+      id_recurso: '101',
       nombre_recurso: 'Sala de reuniones'
     },
     usuario: {
@@ -82,19 +85,9 @@ describe('EditarReservaModalComponent', () => {
     fixture.detectChanges();
     
     expect(component.reservaForm).toBeDefined();
-    expect(component.reservaForm.get('estado')?.validator).toBeTruthy();
     expect(component.reservaForm.get('fecha_inicio')?.validator).toBeTruthy();
     expect(component.reservaForm.get('hora_inicio')?.validator).toBeTruthy();
     expect(component.reservaForm.get('hora_fin')?.validator).toBeTruthy();
-  });
-
-  it('should populate estadosLista on init', () => {
-    fixture.detectChanges();
-    
-    expect(component.estadosLista).toBeDefined();
-    expect(component.estadosLista.length).toBeGreaterThan(0);
-    expect(component.estadosLista[0].id).toBeDefined();
-    expect(component.estadosLista[0].nombre).toBeDefined();
   });
 
   it('should populate form when reserva input changes', () => {
@@ -135,8 +128,7 @@ describe('EditarReservaModalComponent', () => {
   it('should not submit form when form is invalid', () => {
     component.reserva = mockReserva;
     component.reservaForm.patchValue({
-      estado: null, // Invalid
-      hora_inicio: '',
+      hora_inicio: '', // Invalid - required field empty
       hora_fin: '',
       fecha_inicio: ''
     });
@@ -149,7 +141,6 @@ describe('EditarReservaModalComponent', () => {
   it('should not submit form when reserva is null', () => {
     component.reserva = null;
     component.reservaForm.patchValue({
-      estado: 1,
       hora_inicio: '10:00',
       hora_fin: '12:00',
       fecha_inicio: new Date()
@@ -164,7 +155,6 @@ describe('EditarReservaModalComponent', () => {
     component.reserva = mockReserva;
     fixture.detectChanges();
     component.reservaForm.patchValue({
-      estado: 2,
       hora_inicio: '14:00',
       hora_fin: '16:00',
       fecha_inicio: new Date(mockReserva.fechas.fecha_inicio_transaccion)
@@ -172,14 +162,11 @@ describe('EditarReservaModalComponent', () => {
     
     component.editar();
     
-    expect(reservaDataServiceSpy.updateReserva).toHaveBeenCalledWith(1, {
+    expect(reservaDataServiceSpy.updateReserva).toHaveBeenCalledWith({
       fecha_inicio_transaccion: '2024-01-15T14:00:00',
       fecha_fin_transaccion: '2024-01-15T16:00:00',
-      estado_transaccion: 2,
-      falla_servicio: null,
-      id_usuario: 1,
-      id_recurso: 101,
-      id_empleado_responsable: 0
+      id_transaccion: 1,
+      id_usuario: 1
     });
   });
 
@@ -188,7 +175,6 @@ describe('EditarReservaModalComponent', () => {
     component.reserva = mockReserva;
     fixture.detectChanges();
     component.reservaForm.patchValue({
-      estado: 2,
       hora_inicio: '14:00',
       hora_fin: '16:00',
       fecha_inicio: new Date(mockReserva.fechas.fecha_inicio_transaccion)
@@ -205,7 +191,6 @@ describe('EditarReservaModalComponent', () => {
     component.reserva = mockReserva;
     fixture.detectChanges();
     component.reservaForm.patchValue({
-      estado: 2,
       hora_inicio: '14:00',
       hora_fin: '16:00',
       fecha_inicio: new Date(mockReserva.fechas.fecha_inicio_transaccion)
@@ -216,8 +201,7 @@ describe('EditarReservaModalComponent', () => {
     expect(component.errorMessage).toBe('Error al actualizar la reserva. Inténtalo de nuevo.');
     expect(toastrServiceSpy.error).toHaveBeenCalledWith(
       'Error al actualizar la reserva. Inténtalo de nuevo.',
-      'Error',
-      { timeOut: 10000 }
+      'Error'
     );
   });
 
@@ -267,7 +251,7 @@ describe('EditarReservaModalComponent', () => {
     fixture.detectChanges();
     
     const formFields = fixture.debugElement.nativeElement.querySelectorAll('mat-form-field');
-    expect(formFields.length).toBe(4); // fecha, hora inicio, hora fin, estado
+    expect(formFields.length).toBe(3); // fecha, hora inicio, hora fin
     
     const submitButton = fixture.debugElement.nativeElement.querySelector('button[type="submit"]');
     expect(submitButton).toBeTruthy();
@@ -284,6 +268,5 @@ describe('EditarReservaModalComponent', () => {
     expect(labelTexts).toContain('Fecha de reserva:');
     expect(labelTexts).toContain('Hora de inicio:');
     expect(labelTexts).toContain('Hora de fin:');
-    expect(labelTexts).toContain('Estado actual');
   });
 });

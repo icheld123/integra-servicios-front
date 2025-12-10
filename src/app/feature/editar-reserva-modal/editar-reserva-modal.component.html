@@ -37,13 +37,6 @@
           <input matInput type="time" formControlName="hora_fin">
         </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Estado actual</mat-label>
-          <mat-select formControlName="estado">
-            <mat-option *ngFor="let est of estadosLista" [value]="est.id">{{est.nombre}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-
       </div>
       <div class="flex justify-center">
         <button type="submit"

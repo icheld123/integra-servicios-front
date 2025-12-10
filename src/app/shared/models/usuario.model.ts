@@ -8,3 +8,17 @@ export interface Usuario {
   id_unidad: number;
   unidad: string;
 }
+
+export interface UsuarioResponse {
+  usuario: {
+    id_usuario: number;
+    nombre: string;
+    apellido: string;
+    correo: string;
+  };
+  unidad: any | null;
+  tipo: {
+    id_tipo_usuario: number;
+    nombre_tipo_usuario: string;
+  };
+}
