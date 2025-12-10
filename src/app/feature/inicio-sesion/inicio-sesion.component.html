@@ -1,1 +1,129 @@
-<p>inicio-sesion works!</p>
+<div
+  *ngIf="abierto"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+>
+  <div class="modal w-96 rounded-xl shadow-xl p-6 relative bg-white">
+
+    <!-- Cerrar -->
+    <button
+      (click)="close()"
+      class="absolute top-2 right-2 text-white bg-red-600 rounded-full px-2 py-1"
+    >
+      ✕
+    </button>
+
+    <!-- Logo -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Escudo_UD.svg/2118px-Escudo_UD.svg.png"
+         alt="" class="h-32 mx-auto mb-4">
+
+    <!-- Título dinámico -->
+    <h2 class="text-2xl font-bold mb-4 text-center">
+      {{ modoRegistro ? 'Registrarse' : 'Iniciar sesión' }}
+    </h2>
+
+    <!-- MENSAJES DE ERROR Y ÉXITO -->
+    <div *ngIf="errorMessage" class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+      {{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage" class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm">
+      {{ successMessage }}
+    </div>
+
+    <!-- FORMULARIO LOGIN -->
+    <form *ngIf="!modoRegistro" [formGroup]="loginForm" (ngSubmit)="enviarLogin()" class="space-y-4">
+
+      <!-- EMAIL -->
+      <div>
+        <label class="block text-sm font-medium">Correo electrónico</label>
+        <input formControlName="email" type="email"
+               class="text-black mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-red-800"
+               placeholder="tucorreo@mail.com">
+      </div>
+
+      <!-- PASSWORD -->
+      <div>
+        <label class="block text-sm font-medium">Contraseña</label>
+        <input formControlName="password" type="password"
+               class="text-black mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-red-800"
+               placeholder="******">
+      </div>
+
+      <!-- BOTÓN LOGIN -->
+      <div class="flex justify-center">
+        <button type="submit" [disabled]="loading"
+                class="w-24 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white py-2 rounded-full text-lg font-semibold">
+          {{ loading ? '...' : 'Ingresar' }}
+        </button>
+      </div>
+
+      <!-- ENLACE A REGISTRO -->
+      <div class="text-center">
+        <p>¿No tienes cuenta?
+          <a class="cursor-pointer text-white hover:underline font-semibold" (click)="cambiarModo()">
+            Regístrate
+          </a>
+        </p>
+      </div>
+    </form>
+
+    <!-- FORMULARIO REGISTRO -->
+    <form *ngIf="modoRegistro" [formGroup]="registroForm" (ngSubmit)="enviarRegistro()" class="space-y-4">
+
+      <!-- NOMBRE -->
+      <div>
+        <label class="block text-sm font-medium">Nombre</label>
+        <input formControlName="nombre" type="text"
+               class="text-black mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-red-800"
+               placeholder="Tu nombre">
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Apellido</label>
+        <input formControlName="apellido" type="text"
+               class="text-black mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-red-800"
+               placeholder="Tu apellido">
+      </div>
+
+      <!-- EMAIL -->
+      <div>
+        <label class="block text-sm font-medium">Correo electrónico</label>
+        <input formControlName="correo" type="email"
+               class="text-black mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-red-800"
+               placeholder="tucorreo@mail.com">
+      </div>
+
+      <!-- PASSWORD -->
+      <div>
+        <label class="block text-sm font-medium">Contraseña</label>
+        <input formControlName="contrasena" type="password"
+               class="text-black mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-red-800"
+               placeholder="******">
+      </div>
+
+      <!-- CONFIRMAR PASSWORD -->
+      <div>
+        <label class="block text-sm font-medium">Confirmar contraseña</label>
+        <input formControlName="confirmarPassword" type="password"
+               class="text-black mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-red-800"
+               placeholder="******">
+      </div>
+
+      <!-- BOTÓN REGISTRO -->
+      <div class="flex justify-center">
+        <button type="submit" [disabled]="loading"
+                class="w-32 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white py-2 rounded-full text-lg font-semibold">
+          {{ loading ? '...' : 'Registrarme' }}
+        </button>
+      </div>
+
+      <!-- ENLACE A LOGIN -->
+      <div class="text-center">
+        <p>¿Ya tienes cuenta?
+          <a class="cursor-pointer text-white hover:underline font-semibold" (click)="cambiarModo()">
+            Iniciar sesión
+          </a>
+        </p>
+      </div>
+    </form>
+
+  </div>
+</div>

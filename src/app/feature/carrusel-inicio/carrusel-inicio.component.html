@@ -1,0 +1,41 @@
+<div class="relative w-full overflow-hidden">
+
+  <div class="flex transition-transform duration-700 ease-in-out"
+       [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+
+    <div class="w-full flex-shrink-0">
+      <img src="https://ofistim.com.tr/wp-content/uploads/2024/01/pupitres-escolares.jpeg" class="w-full h-64 object-cover md:h-96">
+    </div>
+
+    <div class="w-full flex-shrink-0">
+      <img src="https://www.unillanos.edu.co/images/rotativo2024/COMPUTADORES%20NUEVOS%20IN.png" class="w-full h-64 object-cover md:h-96">
+    </div>
+
+    <div class="w-full flex-shrink-0">
+        <img src="https://www.unach.edu.ec/wp-content/uploads/2021/12/Mesa-de-trabajo-1.jpeg" class="w-full h-64 object-cover md:h-96">
+        
+    </div>
+
+  </div>
+
+  <button (click)="prev()"
+    class="absolute top-1/2 left-3 -translate-y-1/2 bg-white/30 hover:bg-white/50 
+           rounded-full p-2 backdrop-blur-md shadow">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+         stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+
+  <button (click)="next()"
+    class="absolute top-1/2 right-3 -translate-y-1/2 bg-white/30 hover:bg-white/50 
+           rounded-full p-2 backdrop-blur-md shadow">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+         stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+
+</div>

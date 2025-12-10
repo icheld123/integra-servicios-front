@@ -1,0 +1,227 @@
+<h1 class="text-center text-2xl m-4">Panel de administración</h1>
+
+<mat-tab-group>
+  <mat-tab label="Cargar un nuevo recurso">
+    <div class="border-red-400 w-5/6 m-auto justify-center rounded p-4">
+      <p class="text-center text-xl m-4 text-red-500">
+        *Rellene todos los campos obligatorios para (nombre, descripción y tipo de recurso) para crear un recurso nuevo*
+      </p>
+
+      <form [formGroup]="nuevoRecursoForm" class="items-center w-full">
+
+        <mat-form-field class="w-2/5 px-4">
+          <mat-label>Nombre de recurso</mat-label>
+          <input formControlName="nombre_recurso" matInput />
+        </mat-form-field>
+
+        <mat-form-field class="w-2/5 px-4">
+          <mat-label>Descripción de recurso</mat-label>
+          <input formControlName="descripcion_recurso" matInput />
+        </mat-form-field>
+
+        <mat-form-field class="w-1/5 px-4">
+          <mat-label>Tipo de recurso</mat-label>
+          <mat-select formControlName="id_tipo_recurso">
+            <mat-option value="">Todos</mat-option>
+            <mat-option
+              *ngFor="let tipo of tiposRecursos"
+              [value]="tipo.tipo_recurso.id_tipo_recurso"
+              >{{ tipo.tipo_recurso.nombre_tipo_recurso }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+
+        <!-- CONTENEDOR CENTRADO PARA EL INPUT FILE -->
+        <div class="w-full flex justify-center my-4">
+          <input
+            type="file"
+            (change)="onFileSelect($event)"
+            accept="image/*"
+            class="block w-3/5 text-sm text-gray-700 bg-gray-50 cursor-pointer 
+              border border-gray-300 rounded-lg p-2 
+              file:bg-gray-200 file:border-0 file:mr-4 file:px-4 file:py-2 
+              file:rounded-lg file:text-gray-700 file:cursor-pointer 
+              hover:file:bg-gray-300 transition"
+          />
+        </div>
+
+        <!-- CONTENEDOR CENTRADO PARA EL BOTÓN -->
+        <div class="w-full flex justify-center mt-4">
+          <button
+            type="button"
+            (click)="crearRecursoNuevo()"
+            [disabled]="nuevoRecursoForm.invalid"
+            class="px-6 py-2 rounded-lg text-white 
+              bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            Crear recurso
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Cargar tipos de recursos">
+    <div class="border-red-400 w-5/6 m-auto justify-center rounded p-4">
+      <p class="text-center text-xl m-4 text-red-500">
+        *Rellene todos los campos obligatorios para (nombre, código de tipo de recurso, horario de disponibilidad y unidad) para crear un recurso nuevo*
+      </p>
+
+      <form [formGroup]="nuevoTipoRecursoForm" class="items-center w-full">
+
+        <mat-form-field class="w-2/5 px-4">
+          <mat-label>Nombre del tipo de recurso</mat-label>
+          <input formControlName="nombre_tipo_recurso" matInput />
+        </mat-form-field>
+
+        <mat-form-field class="w-2/5 px-4">
+          <mat-label>Código del tipo de recurso</mat-label>
+          <input formControlName="codigo_tipo_recurso" matInput />
+        </mat-form-field>
+
+        <mat-form-field class="w-2/5 px-4">
+          <mat-label>Descripción del tipo de recurso</mat-label>
+          <input formControlName="descripcion_tipo_recurso" matInput />
+        </mat-form-field>
+
+        <mat-form-field class="w-2/5 px-4">
+            <mat-label>Horario de disponibilidad</mat-label>
+            <mat-select formControlName="horario_disponibilidad">
+                <mat-option *ngFor="let h of categoriasHorarios" [value]="h">
+                {{ h }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-2/5 px-4">
+            <mat-label>Unidad</mat-label>
+            <mat-select formControlName="id_unidad">
+                <mat-option *ngFor="let u of unidades" [value]="u.id_unidad">
+                {{ u.nombre_unidad }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- CONTENEDOR CENTRADO PARA EL BOTÓN -->
+        <div class="w-full flex justify-center mt-4">
+          <button
+            type="button"
+            (click)="crearTipoRecurso()"
+            [disabled]="nuevoTipoRecursoForm.invalid"
+            class="px-6 py-2 rounded-lg text-white 
+              bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            Crear tipo de recurso
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Cargar unidades">
+    <div class="border-red-400 w-5/6 m-auto justify-center rounded p-4">
+      <p class="text-center text-xl m-4 text-red-500">
+        *Rellene todos los campos para crear una nueva unidad*
+      </p>
+
+      <form [formGroup]="nuevaUnidadForm" class="items-center w-full">
+
+        <mat-form-field class="w-2/5 px-4">
+          <mat-label>Nombre de la unidad</mat-label>
+          <input formControlName="nombre_unidad" matInput />
+        </mat-form-field>
+
+        <mat-form-field class="w-2/5 px-4">
+            <mat-label>Horario de disponibilidad</mat-label>
+            <mat-select formControlName="horario_unidad">
+                <mat-option *ngFor="let h of categoriasHorarios" [value]="h">
+                {{ h }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- CONTENEDOR CENTRADO PARA EL BOTÓN -->
+        <div class="w-full flex justify-center mt-4">
+          <button
+            type="button"
+            (click)="crearUnidad()"
+            [disabled]="nuevaUnidadForm.invalid"
+            class="px-6 py-2 rounded-lg text-white 
+              bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            Crear unidad
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Cargar usuarios">
+        <div class="border-red-400 w-5/6 m-auto justify-center rounded p-4">
+      <p class="text-center text-xl m-4 text-red-500">
+        *Rellene todos los campos para crear un usuario nuevo*
+      </p>
+
+      <form [formGroup]="nuevoUsuarioForm" class="items-center w-full">
+
+        <mat-form-field class="w-2/5 px-4">
+          <mat-label>Nombre</mat-label>
+          <input formControlName="nombre" matInput />
+        </mat-form-field>
+
+        <mat-form-field class="w-2/5 px-4">
+          <mat-label>Apellido</mat-label>
+          <input formControlName="apellido" matInput />
+        </mat-form-field>
+
+        <mat-form-field class="w-2/5 px-4">
+          <mat-label>Correo</mat-label>
+          <input formControlName="correo" matInput />
+        </mat-form-field>
+
+        <mat-form-field class="w-2/5 px-4">
+          <mat-label>Contraseña</mat-label>
+          <input type="password" formControlName="contrasena" matInput />
+        </mat-form-field>
+
+        <mat-form-field class="w-2/5 px-4">
+            <mat-label>Tipo de usuario</mat-label>
+            <mat-select formControlName="id_tipo_usuario">
+                <mat-option 
+                    *ngFor="let tipo of tiposUsuario"
+                    [value]="tipo.id"
+                    >
+                    {{ tipo.nombre }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-2/5 px-4">
+            <mat-label>Unidad</mat-label>
+            <mat-select formControlName="id_unidad">
+                <mat-option *ngFor="let u of unidades" [value]="u.id_unidad">
+                {{ u.nombre_unidad }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- CONTENEDOR CENTRADO PARA EL BOTÓN -->
+        <div class="w-full flex justify-center mt-4">
+          <button
+            type="button"
+            (click)="crearUsuario()"
+            [disabled]="nuevoUsuarioForm.invalid"
+            class="px-6 py-2 rounded-lg text-white 
+              bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            Crear usuario
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </mat-tab>
+</mat-tab-group>
