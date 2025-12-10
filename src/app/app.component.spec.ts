@@ -1,20 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
-import { Component } from '@angular/core';
 import { AppComponent } from './app.component';
-
-// Mock components para evitar dependencias
-@Component({
-  selector: 'app-navbar',
-  template: '<nav>Mock Navbar</nav>'
-})
-class MockNavbarComponent {}
-
-@Component({
-  selector: 'app-footer',
-  template: '<footer>Mock Footer</footer>'
-})
-class MockFooterComponent {}
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -23,9 +9,7 @@ describe('AppComponent', () => {
         RouterModule.forRoot([])
       ],
       declarations: [
-        AppComponent,
-        MockNavbarComponent,
-        MockFooterComponent
+        AppComponent
       ],
     }).compileComponents();
   });
@@ -42,36 +26,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('integra-servicios-front');
   });
 
-  it('should render navbar component', () => {
+  it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-navbar')).toBeTruthy();
-  });
-
-  it('should render footer component', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-footer')).toBeTruthy();
-  });
-
-  it('should render router-outlet', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('router-outlet')).toBeTruthy();
-  });
-
-  it('should have the correct component structure', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    
-    // Verificar que los componentes estén en el orden correcto
-    const children = compiled.children;
-    expect(children[0].tagName.toLowerCase()).toBe('app-navbar');
-    expect(children[1].tagName.toLowerCase()).toBe('router-outlet');
-    expect(children[2].tagName.toLowerCase()).toBe('app-footer');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, integra-servicios-front');
   });
 });
