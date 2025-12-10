@@ -84,8 +84,9 @@ export class ReservaModalComponent {
         this.close();
         
       },
-      error: (e) => {
-        this.toastr.error(e.error.detail, 'Error');
+      error: () => {
+        this.errorMessage = 'Error al generar la reserva. Inténtalo de nuevo.';
+        this.toastr.error(this.errorMessage, 'Error', { timeOut: 10000 });
       }
     });
   }

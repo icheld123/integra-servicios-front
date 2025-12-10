@@ -10,25 +10,26 @@ export class HttpgeneralService {
     public authService: AuthService
   ) {}
 
-  public getHeader(){
-      const token = this.authService.getToken();
+    public getHeader(){
+        const token = this.authService.getToken();
 
-      let headers = new HttpHeaders({
-          'Authorization': `Bearer ${token}`
-      });
-      return headers;
-  }
+        let headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+        return headers;
+    }
 
-  public validateContentType(contentTypeValue?: string) {
+  public validateContentType(contentTypeValue?: string){
     let header = this.getHeader();
 
     if (contentTypeValue) {
-      header = header.append('Content-Type', contentTypeValue);
+        header = header.append('Content-Type', contentTypeValue);
+    } else {
+        header = header.append('Content-Type', 'application/json');
     }
 
     return header;
   }
-
 
 
   public doPost<T>(endpoint: string, body: any,  data?: any, contentTypeHeader?: string): Observable<T>{

@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { LoginCredentials } from '../../core/services/auth/auth.models';
 import { ToastrService } from 'ngx-toastr';
-import { UsuarioDataService } from '../../shared/services/usuario.data.service';
-import { timeout } from 'rxjs';
 
 
 @Component({
@@ -26,7 +24,6 @@ export class InicioSesionComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private usuarioDataService: UsuarioDataService,
     private toastr: ToastrService
   ) {
 
@@ -37,50 +34,16 @@ export class InicioSesionComponent {
 
     this.registroForm = this.fb.group({
       nombre: ['', [Validators.required]],
-      apellido: ['', [Validators.required]],
-      correo: ['', [Validators.required, Validators.email]],
-      contrasena: ['', [Validators.required, Validators.minLength(6)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       confirmarPassword: ['', [Validators.required]],
     }, { validators: this.passwordMatchValidator });
   }
 
   passwordMatchValidator(group: FormGroup) {
-    const password = group.get('contrasena')?.value;
+    const password = group.get('password')?.value;
     const confirmarPassword = group.get('confirmarPassword')?.value;
     return password === confirmarPassword ? null : { passwordMismatch: true };
-  }
-
-  enviarRegistro(){
-    this.loading = true;
-    this.errorMessage = null;
-    this.successMessage = null;
-    const usuarioNuevoData = {
-      nombre: this.registroForm.get('nombre')?.value,
-      apellido: this.registroForm.get('apellido')?.value,
-      correo: this.registroForm.get('correo')?.value,
-      contrasena: this.registroForm.get('contrasena')?.value,
-    }
-
-    if(this.registroForm.valid && this.registroForm.get('contrasena')?.value == this.registroForm.get('contrasena')?.value){
-      const usuarioNuevoData = {
-        nombre: this.registroForm.get('nombre')?.value,
-        apellido: this.registroForm.get('apellido')?.value,
-        correo: this.registroForm.get('correo')?.value,
-        contrasena: this.registroForm.get('contrasena')?.value,
-      }
-      this.usuarioDataService.createUsuario(usuarioNuevoData).subscribe({
-        next: () => {
-          this.toastr.success("Nuevo usuario registrado! Ya puede iniciar sesión.");
-          this.loading = false;
-          this.registroForm.reset();
-          this.cerrar.emit();
-        },
-        error: (e) => {
-          this.loading = false;
-          this.toastr.error(e.error.detail,"Error.");
-        }
-      });
-    }
   }
 
   enviarLogin() {
@@ -111,6 +74,16 @@ export class InicioSesionComponent {
         this.toastr.error('Credenciales inválidas. Intenta nuevamente.', 'Error');
       }
     });
+  }
+
+  enviarRegistro() {
+    if (this.registroForm.invalid) {
+      this.toastr.error('Por favor, completa todos los campos correctamente', 'Error');
+      return;
+    }
+    this.loading = true;
+    this.errorMessage = null;
+    this.successMessage = null;
   }
 
   cambiarModo() {

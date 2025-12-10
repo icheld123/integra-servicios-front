@@ -20,8 +20,8 @@ export class ReservaDataService {
         );
     }
 
-    updateReserva(body: any): Observable<any> {
-        const url = `${environment.apiUrl}transaccion/cambioFechas`;
+    updateReserva(id: number, body: any): Observable<any> {
+        const url = `${environment.apiUrl}transaccion/${id}`;
 
         return this.http.doPut<any>(url, body);
     }

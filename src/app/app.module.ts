@@ -14,14 +14,13 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTabsModule} from '@angular/material/tabs';
 import {TextFieldModule} from '@angular/cdk/text-field';
 import {MatTableModule} from '@angular/material/table';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import { SurveyModule } from "survey-angular-ui";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './core/navbar/navbar.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { InicioComponent } from './feature/inicio/inicio.component';
+import { RegistroComponent } from './feature/registro/registro.component';
 import { InicioSesionComponent } from './feature/inicio-sesion/inicio-sesion.component';
 import { CarruselInicioComponent } from './feature/carrusel-inicio/carrusel-inicio.component';
 import { DashboardComponent } from './feature/dashboard/dashboard.component';
@@ -31,11 +30,6 @@ import { HttpgeneralService } from './core/services/http-general.service';
 import { ReservaModalComponent } from './feature/reserva-modal/reserva-modal.component';
 import { MiPerfilComponent } from './feature/mi-perfil/mi-perfil.component';
 import { EditarReservaModalComponent } from './feature/editar-reserva-modal/editar-reserva-modal.component';
-import { PrestamoComponent } from './feature/prestamo/prestamo.component';
-import { ConfirmarAccionComponent } from './feature/confirmar-accion/confirmar-accion.component';
-import { DevolucionModalComponent } from './feature/devolucion-modal/devolucion-modal.component';
-import { PanelAdminComponent } from './feature/panel-admin/panel-admin.component';
-import { EncuestaModalComponent } from './feature/encuesta-modal/encuesta-modal.component';
 
 @NgModule({
   declarations: [
@@ -43,17 +37,13 @@ import { EncuestaModalComponent } from './feature/encuesta-modal/encuesta-modal.
     NavbarComponent,
     FooterComponent,
     InicioComponent,
+    RegistroComponent,
     InicioSesionComponent,
     CarruselInicioComponent,
     DashboardComponent,
     ReservaModalComponent,
     MiPerfilComponent,
     EditarReservaModalComponent,
-    PrestamoComponent,
-    ConfirmarAccionComponent,
-    DevolucionModalComponent,
-    PanelAdminComponent,
-    EncuestaModalComponent
   ],
   imports: [
     BrowserModule,
@@ -70,9 +60,7 @@ import { EncuestaModalComponent } from './feature/encuesta-modal/encuesta-modal.
     MatTabsModule,
     TextFieldModule,
     MatTableModule,
-    SurveyModule,
-    MatAutocompleteModule,
-    ToastrModule.forRoot({timeOut: 5000}),
+    ToastrModule.forRoot(),
   ],
   providers: [
     AuthService,

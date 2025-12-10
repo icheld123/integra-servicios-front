@@ -14,17 +14,14 @@ export interface ReservaNueva {
 
 export interface Reserva {
     transaccion: number;
-    estado_actual: {
-        id_estado_transaccion: number;
-        nombre_estado_transaccion: string;
-    };
+    estado_actual: string;
     fechas: {
         fecha_inicio_transaccion: string;
         fecha_fin_transaccion: string;
         fecha_creacion: string;
     };
     recurso: {
-        id_recurso: string;
+        id_recurso: number;
         nombre_recurso: string;
     };
     usuario: {
